@@ -7,11 +7,20 @@ import swetch from "../../public/swetch.png";
 import filterImg from "../../public/filter.png";
 import laft from "../../public/uis_angle-left.png";
 import raght from "../../public/uis_angle-left (1).png";
+import wan from "../../public/div.project-inner.png"
+import tan from "../../public/div.project-inner (1).png";
+import tran from "../../public/div.project-inner (2).png";
+import fan from "../../public/div.project-inner (3).png";
+import fin from "../../public/div.project-inner (4).png";
+import san from "../../public/div.project-inner (5).png";
+import sen from "../../public/div.project-inner (6).png";
+import eenn from "../../public/div.project-inner (7).png";
+import nin from "../../public/div.project-inner (8).png";
 
 // ====== STATIC PROPERTIES LIST ======
 const properties = [
   {
-    image: "/public/div.project-inner.png",
+    image: wan,
     title: "Real House Luxury Villa",
     location: "Victoria Island, Lagos",
     beds: 6,
@@ -19,7 +28,7 @@ const properties = [
     price: "₦ 3,340,000,000",
   },
   {
-    image: "/public/div.project-inner (1).png",
+    image: tan,
     title: "Exquisite Haven Villa",
     location: "Festac, Lagos",
     beds: 5,
@@ -27,7 +36,7 @@ const properties = [
     price: "₦ 4,000,000/1 Year",
   },
   {
-    image: "/public/div.project-inner (2).png",
+    image: tran,
     title: "Luxe Palatial Villa",
     location: "Gbagada, Lagos",
     beds: 7,
@@ -35,7 +44,7 @@ const properties = [
     price: "₦ 5,350,000,000",
   },
   {
-    image: "/public/div.project-inner (3).png",
+    image: fan,
     title: "Harmony Luxury Villa",
     location: "Mushin Lagos",
     beds: 4,
@@ -43,7 +52,7 @@ const properties = [
     price: "₦ 4,000,000/1 Year",
   },
   {
-    image: "/public/div.project-inner (4).png",
+    image: fin,
     title: "Real House Luxury Villa",
     location: "Victoria Island, Lagos",
     beds: 6,
@@ -51,7 +60,7 @@ const properties = [
     price: "₦ 350,000,000",
   },
   {
-    image: "/public/div.project-inner (5).png",
+    image: san,
     title: "Real House Luxury Villa",
     location: "Lekki-Ajah, Lagos",
     beds: 5,
@@ -59,7 +68,7 @@ const properties = [
     price: "₦ 4,200,000/1 Year",
   },
   {
-    image: "/public/div.project-inner (6).png",
+    image: sen,
     title: "Infinite Bliss Villa",
     location: "Ishiagu, Enugu",
     beds: 5,
@@ -67,7 +76,7 @@ const properties = [
     price: "₦ 2,350,000,000",
   },
   {
-    image: "/public/div.project-inner (7).png",
+    image: eenn,
     title: "Real Houae Luxury Villa",
     location: "Works Layout, Owerri",
     beds: 8,
@@ -75,7 +84,7 @@ const properties = [
     price: "₦ 3,350,000/1 Year",
   },
   {
-    image: "/public/div.project-inner (8).png",
+    image: nin,
     title: "Real House Villa",
     location: "Ikeja, Lagos",
     beds: 6,
