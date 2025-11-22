@@ -10,19 +10,20 @@ import raght from "../../public/uis_angle-left (1).png";
 
 const BACKEND_URL = "https://beta-ohxc.onrender.com";
 
-// PRICE FORMATTER
+// Price formatter
 const formatPrice = (price, period) => {
   if (!price) return "₦ 0";
   const formatted = Number(price).toLocaleString();
   return period ? `₦ ${formatted} / ${period}` : `₦ ${formatted}`;
 };
 
-// FIXED IMAGE HANDLER
+// Image handler
 const getImageURL = (url) => {
   if (!url) return "/placeholder.jpg";
   return url.startsWith("http") ? url : `${BACKEND_URL}/uploads/${url}`;
 };
 
+// Single property card
 const PropertyCard = ({ image, title, location, beds, baths, price }) => (
   <div className="rounded-2xl overflow-hidden border border-[#DDD8D8] flex flex-col">
     <div className="relative w-full h-60 sm:h-52 md:h-60">
@@ -44,11 +45,11 @@ const PropertyCard = ({ image, title, location, beds, baths, price }) => (
 
       <div className="flex items-center gap-4 text-gray-700 text-sm mt-2 flex-wrap">
         <span className="flex items-center gap-1">
-          <img src={bedd} alt="" />
+          <img src={bedd} alt="beds" />
           {beds ?? 0} Beds
         </span>
         <span className="flex items-center gap-1">
-          <img src={throom} alt="" />
+          <img src={throom} alt="baths" />
           {baths ?? 0} Baths
         </span>
       </div>
@@ -65,6 +66,7 @@ const PropertyCard = ({ image, title, location, beds, baths, price }) => (
   </div>
 );
 
+// Header showing total results
 export const ResultHeader = ({ total }) => (
   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full px-4 sm:px-6 lg:px-0 max-w-7xl mx-auto gap-4 sm:gap-0">
     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
@@ -86,29 +88,33 @@ export const ResultHeader = ({ total }) => (
   </div>
 );
 
+// Main grid component
 export const PropertyGrid = ({ filters, resetFilters }) => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // GET PROPERTIES
   useEffect(() => {
-    fetch(`${BACKEND_URL}/api/properties`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProperties(Array.isArray(data.data) ? data.data : []);
+    const fetchProperties = async () => {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/properties`);
+        const data = await res.json();
+        setProperties(Array.isArray(data.results) ? data.results : []);
+      } catch (err) {
+        console.error("Failed to fetch properties:", err);
+      } finally {
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      }
+    };
+    fetchProperties();
   }, []);
 
-  // FILTER VALUES
-  const locationFilter = filters?.location?.toLowerCase() || "";
-  const typeFilter = filters?.propertyType?.toLowerCase() || "";
-  const bedroomFilter =
-    typeof filters?.bedrooms === "number" ? filters.bedrooms : null;
-
-  // APPLY FILTERS PROPERLY
+  // Filter logic
   const filteredProperties = properties.filter((p) => {
+    const locationFilter = filters?.location?.toLowerCase() || "";
+    const bedroomFilter =
+      typeof filters?.bedrooms === "number" ? filters.bedrooms : null;
+    const typeFilter = filters?.propertyType?.toLowerCase() || "";
+
     const matchesLocation =
       !locationFilter || p.location?.toLowerCase().includes(locationFilter);
 
@@ -127,42 +133,42 @@ export const PropertyGrid = ({ filters, resetFilters }) => {
       </div>
     );
 
+  if (filteredProperties.length === 0)
+    return (
+      <div className="w-full flex flex-col items-center justify-center py-20 text-center px-4">
+        <div className="text-3xl font-bold text-gray-700 mb-4">
+          No Results Found
+        </div>
+        <p className="text-gray-500 mb-6">
+          Try adjusting your filters or search keywords.
+        </p>
+        <button
+          onClick={resetFilters}
+          className="px-4 py-2 bg-[#3E8C6A] text-white rounded-lg shadow hover:bg-[#2f6c52] transition"
+        >
+          Reload Properties
+        </button>
+      </div>
+    );
+
   return (
     <>
       <ResultHeader total={filteredProperties.length} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 sm:p-6 lg:p-6 max-w-7xl mx-auto">
+        {filteredProperties.map((p) => (
+          <PropertyCard
+            key={p._id}
+            image={p.images?.[0]}
+            title={p.title}
+            location={p.location}
+            beds={p.beds}
+            baths={p.baths}
+            price={formatPrice(p.price, p.period)}
+          />
+        ))}
+      </div>
 
-      {filteredProperties.length === 0 ? (
-        <div className="w-full flex flex-col items-center justify-center py-20 text-center px-4">
-          <div className="text-3xl font-bold text-gray-700 mb-4">
-            No Results Found
-          </div>
-          <p className="text-gray-500 mb-6">
-            Try adjusting your filters or search keywords.
-          </p>
-          <button
-            onClick={resetFilters}
-            className="px-4 py-2 bg-[#3E8C6A] text-white rounded-lg shadow hover:bg-[#2f6c52] transition"
-          >
-            Reload Properties
-          </button>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 sm:p-6 lg:p-6 max-w-7xl mx-auto">
-          {filteredProperties.map((p) => (
-            <PropertyCard
-              key={p._id}
-              image={p.images?.[0]} // FIXED
-              title={p.title}
-              location={p.location}
-              beds={p.beds}
-              baths={p.baths}
-              price={formatPrice(p.price, p.period)}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* PAGINATION */}
+      {/* Pagination (static for now) */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 py-6 px-4 sm:px-0">
         <button className="text-gray-500 hover:text-gray-700">
           <img src={laft} alt="prev" className="w-5 h-5" />
