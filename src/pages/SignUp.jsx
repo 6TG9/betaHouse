@@ -17,7 +17,6 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Handle normal signup
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -46,12 +45,12 @@ export default function Signup() {
     setLoading(false);
   };
 
-  // Handle Google login
   useEffect(() => {
     /* global google */
     if (window.google) {
       google.accounts.id.initialize({
-        client_id: "926647134050-ustihlu3vte1k4vt44q4j46311vv7ii0.apps.googleusercontent.com", // <-- replace with your client ID
+        client_id:
+          "926647134050-ustihlu3vte1k4vt44q4j46311vv7ii0.apps.googleusercontent.com",
         callback: handleGoogleResponse,
       });
 
@@ -69,7 +68,6 @@ export default function Signup() {
       setLoading(true);
       setErrorMsg("");
 
-      // Send the Google token to your backend
       const res = await axios.post(
         "https://beta-ohxc.onrender.com/api/auth/google",
         { token: response.credential }
@@ -79,7 +77,7 @@ export default function Signup() {
       const tokenData = res.data.data.token;
 
       login(userData, tokenData);
-      navigate("/"); // redirect to home after login
+      navigate("/");
     } catch (error) {
       console.error(error);
       setErrorMsg(error.response?.data?.message || "Google login failed");
@@ -89,28 +87,31 @@ export default function Signup() {
   };
 
   return (
-    <div className="sup flex">
-      <div className="min-h-screen bg-white text-black p-20 flex justify-center">
-        <div className="w-full max-w-lg">
-          <h1 className="text-3xl font-bold leading-tight">
+    <div className="flex flex-col md:flex-row min-h-screen">
+      {/* Form Section */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-white">
+        <div className="w-full max-w-md">
+          <h1 className="text-2xl sm:text-3xl font-bold leading-tight text-gray-900">
             Join our community of home seekers and explore the possibilities
             that await.
           </h1>
 
-          <p className="mt-3 text-black-300">
+          <p className="mt-2 text-gray-600 text-sm sm:text-base">
             Let’s get started by filling out the information below
           </p>
 
           {errorMsg && <p className="text-red-500 mt-4 text-sm">{errorMsg}</p>}
 
-          <form className="mt-8 space-y-5" onSubmit={handleSignup}>
+          <form className="mt-6 space-y-4" onSubmit={handleSignup}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block mb-1 text-sm">First Name</label>
+                <label className="block mb-1 text-sm font-medium">
+                  First Name
+                </label>
                 <input
                   type="text"
                   placeholder="Enter Name"
-                  className="w-full px-4 py-3 border border-gray-200 bg-transparent rounded-md focus:outline-none"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   required
@@ -118,11 +119,13 @@ export default function Signup() {
               </div>
 
               <div>
-                <label className="block mb-1 text-sm">Last name</label>
+                <label className="block mb-1 text-sm font-medium">
+                  Last Name
+                </label>
                 <input
                   type="text"
                   placeholder="Enter Name"
-                  className="w-full px-4 py-3 border border-gray-200 bg-transparent rounded-md focus:outline-none"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   required
@@ -131,11 +134,11 @@ export default function Signup() {
             </div>
 
             <div>
-              <label className="block mb-1 text-sm">Email</label>
+              <label className="block mb-1 text-sm font-medium">Email</label>
               <input
                 type="email"
                 placeholder="Enter your Email"
-                className="w-full px-4 py-3 border border-gray-200 bg-transparent rounded-md focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -143,11 +146,11 @@ export default function Signup() {
             </div>
 
             <div>
-              <label className="block mb-1 text-sm">Password</label>
+              <label className="block mb-1 text-sm font-medium">Password</label>
               <input
                 type="password"
                 placeholder="Enter your password"
-                className="w-full px-4 py-3 border border-gray-200 bg-transparent rounded-md focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -155,20 +158,22 @@ export default function Signup() {
             </div>
 
             <div>
-              <label className="block mb-1 text-sm">Confirm password</label>
+              <label className="block mb-1 text-sm font-medium">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 placeholder="Confirm your password"
-                className="w-full px-4 py-3 border border-gray-200 bg-transparent rounded-md focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
 
-            <div className="flex items-center space-x-2 mt-2">
-              <input type="checkbox" className="w-5 h-5 accent-green-500" />
-              <p className="text-gray-300 text-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 mt-2 text-sm">
+              <input type="checkbox" className="w-4 h-4 accent-green-500" />
+              <p className="text-gray-500">
                 I agree to{" "}
                 <a className="text-green-500 hover:underline">
                   Terms of Service
@@ -182,23 +187,23 @@ export default function Signup() {
 
             <button
               type="submit"
-              className="w-full cursor-pointer py-4 mt-2 text-white bg-green-600 rounded-full text-lg font-medium hover:bg-green-700 transition"
+              className="w-full py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition"
               disabled={loading}
             >
               {loading ? "Creating account..." : "Sign up"}
             </button>
           </form>
 
-          <div className="flex items-center my-6">
-            <div className="flex-1 h-px bg-gray-300"></div>
-            <p className="px-4 text-gray-400">or</p>
-            <div className="flex-1 h-px bg-gray-300"></div>
+          <div className="flex items-center my-4">
+            <hr className="flex-1 border-gray-300" />
+            <span className="px-2 text-gray-400 text-sm">or</span>
+            <hr className="flex-1 border-gray-300" />
           </div>
 
           {/* Google login button */}
           <div id="google-button" className="w-full"></div>
 
-          <p className="text-center mt-6 text-gray-300">
+          <p className="text-center mt-4 text-gray-500 text-sm">
             Already have an account?{" "}
             <Link
               to="/signin"
@@ -210,8 +215,13 @@ export default function Signup() {
         </div>
       </div>
 
-      <div>
-        <img src={sig} alt="" className="w-full h-full" />
+      {/* Image Section */}
+      <div className="hidden md:flex md:flex-1">
+        <img
+          src={sig}
+          alt="Signup illustration"
+          className="object-cover w-full h-full"
+        />
       </div>
     </div>
   );
