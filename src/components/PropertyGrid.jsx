@@ -10,16 +10,18 @@ import raght from "../../public/uis_angle-left (1).png";
 
 const BACKEND_URL = "https://beta-ohxc.onrender.com";
 
+// PRICE FORMATTER
 const formatPrice = (price, period) => {
-  if (!price) return "Price not available";
+  if (!price) return "₦ 0";
   const formatted = Number(price).toLocaleString();
   return period ? `₦ ${formatted} / ${period}` : `₦ ${formatted}`;
 };
 
+// FIXED IMAGE HANDLER
 const getImageURL = (url) => {
   if (!url) return "/placeholder.jpg";
   return url.startsWith("http") ? url : `${BACKEND_URL}/uploads/${url}`;
-}; // Cloudinary URLs are already full paths
+};
 
 const PropertyCard = ({ image, title, location, beds, baths, price }) => (
   <div className="rounded-2xl overflow-hidden border border-[#DDD8D8] flex flex-col">
@@ -32,12 +34,14 @@ const PropertyCard = ({ image, title, location, beds, baths, price }) => (
     </div>
     <div className="p-4 flex flex-col justify-between flex-1">
       <h3 className="font-semibold text-lg text-gray-900">{title}</h3>
+
       <div className="flex items-center text-sm text-gray-600 gap-1 mt-1">
         <svg width="16" height="16" fill="currentColor">
           <path d="M8 0a5 5 0 0 0-5 5c0 4 5 11 5 11s5-7 5-11a5 5 0 0 0-5-5zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
         </svg>
         {location || "Location not specified"}
       </div>
+
       <div className="flex items-center gap-4 text-gray-700 text-sm mt-2 flex-wrap">
         <span className="flex items-center gap-1">
           <img src={bedd} alt="" />
@@ -48,6 +52,7 @@ const PropertyCard = ({ image, title, location, beds, baths, price }) => (
           {baths ?? 0} Baths
         </span>
       </div>
+
       <div className="flex justify-between items-center pt-3 border-t border-t-[#DDD8D8] mt-4 flex-wrap gap-2">
         <p className="font-semibold text-gray-900">{price}</p>
         <div className="flex items-center gap-3 text-gray-600">
@@ -85,31 +90,33 @@ export const PropertyGrid = ({ filters, resetFilters }) => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // GET PROPERTIES
   useEffect(() => {
     fetch(`${BACKEND_URL}/api/properties`)
       .then((res) => res.json())
       .then((data) => {
-        setProperties(Array.isArray(data.results) ? data.results : []);
+        setProperties(Array.isArray(data.data) ? data.data : []);
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
 
-  const locationFilter =
-    typeof filters?.location === "string" ? filters.location.toLowerCase() : "";
-  const typeFilter =
-    typeof filters?.propertyType === "string"
-      ? filters.propertyType.toLowerCase()
-      : "";
+  // FILTER VALUES
+  const locationFilter = filters?.location?.toLowerCase() || "";
+  const typeFilter = filters?.propertyType?.toLowerCase() || "";
   const bedroomFilter =
     typeof filters?.bedrooms === "number" ? filters.bedrooms : null;
 
+  // APPLY FILTERS PROPERLY
   const filteredProperties = properties.filter((p) => {
     const matchesLocation =
       !locationFilter || p.location?.toLowerCase().includes(locationFilter);
+
     const matchesBedrooms = !bedroomFilter || p.beds >= bedroomFilter;
+
     const matchesType =
-      !typeFilter || p.title?.toLowerCase().includes(typeFilter);
+      !typeFilter || p.propertyType?.toLowerCase().includes(typeFilter);
+
     return matchesLocation && matchesBedrooms && matchesType;
   });
 
@@ -144,7 +151,7 @@ export const PropertyGrid = ({ filters, resetFilters }) => {
           {filteredProperties.map((p) => (
             <PropertyCard
               key={p._id}
-              image={getImageURL(p.images?.[0])}
+              image={p.images?.[0]} // FIXED
               title={p.title}
               location={p.location}
               beds={p.beds}
