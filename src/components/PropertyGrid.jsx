@@ -16,7 +16,10 @@ const formatPrice = (price, period) => {
   return period ? `₦ ${formatted} / ${period}` : `₦ ${formatted}`;
 };
 
-const getImageURL = (url) => url || "/placeholder.jpg"; // Cloudinary URLs are already full paths
+const getImageURL = (url) => {
+  if (!url) return "/placeholder.jpg";
+  return url.startsWith("http") ? url : `${BACKEND_URL}/uploads/${url}`;
+}; // Cloudinary URLs are already full paths
 
 const PropertyCard = ({ image, title, location, beds, baths, price }) => (
   <div className="rounded-2xl overflow-hidden border border-[#DDD8D8] flex flex-col">
